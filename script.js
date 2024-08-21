@@ -1,117 +1,113 @@
-"use strict";
-
-const quizData = [
- {
-  question: "Where is the correct place to insert a JavaScript?",
-  a: "The <head> section",
-  b: "The <body> section",
-  c: "Both the <head> and the <body> section are correct",
-  d: "none of the above",
-  correct: "c"
- },
-
- {
-  question: "Which language runs in a web browser?",
-  a: "Java",
-  b: "C",
-  c: "Python",
-  d: "JavaScript",
-  correct: "d"
- },
- {
-  question: "What does CSS stand for?",
-  a: "Central Style Sheets",
-  b: "Cascading Style Sheets",
-  c: "Cascading Simple Sheets",
-  d: "Cars SUVs Sailboats",
-  correct: "b"
- },
- {
-  question: "What does HTML stand for?",
-  a: "Hypertext Markup Language",
-  b: "Hypertext Markdown Language",
-  c: "Hyperloop Machine Language",
-  d: "Helicopters Terminals Motorboats Lamborginis",
-  correct: "a"
- },
- {
-  question: "What year was JavaScript launched?",
-  a: "1996",
-  b: "1995",
-  c: "1994",
-  d: "none of the above",
-  correct: "b"
- }
+// Define an array of quiz questions
+const quizQuestions = [
+  {
+    question: "What is the capital of France?",
+    options: ["Paris", "London", "Berlin", "Rome"],
+    correctAnswer: "Paris"
+  },
+  {
+    question: "Which planet is known as the Red Planet?",
+    options: ["Venus", "Mars", "Jupiter", "Saturn"],
+    correctAnswer: "Mars"
+  },
+  {
+    question: "What is the chemical symbol for gold?",
+    options: ["Au", "Ag", "Cu", "Fe"],
+    correctAnswer: "Au"
+  }
 ];
 
-const quiz = document.querySelector(".quiz-body");
-const answerEl = document.querySelectorAll(".answer");
-const questionEl = document.getElementById("question");
-const footerEl = document.querySelector(".quiz-footer");
-const quizDetailEl = document.querySelector(".quiz-details");
-const liEl = document.querySelector("ul li");
-
-const a_txt = document.getElementById("a_text");
-const b_txt = document.getElementById("b_text");
-const c_txt = document.getElementById("c_text");
-const d_txt = document.getElementById("d_text");
-const btnSubmit = document.getElementById("btn");
-
-let currentQuiz = 0;
+// Variables to track quiz state
+let currentQuestionIndex = 0;
 let score = 0;
+let timeLeft = 30;
+let timerInterval;
 
-loadQuiz();
-
-function loadQuiz() {
- deselectAnswers();
- const currentQuizData = quizData[currentQuiz];
- questionEl.innerText = currentQuizData.question;
- a_txt.innerText = currentQuizData.a;
- b_txt.innerText = currentQuizData.b;
- c_txt.innerText = currentQuizData.c;
- d_txt.innerText = currentQuizData.d;
- quizDetailEl.innerHTML = `<p>${currentQuiz + 1} of ${quizData.length}</p>`;
+// Function to start the quiz
+function startQuiz() {
+  // Hide the start button and display the first question
+  document.getElementById("start-button").style.display = "none";
+  displayQuestion();
+  startTimer();
 }
 
-// deselect
-function deselectAnswers() {
- answerEl.forEach((answerEl) => {
-  answerEl.checked = false;
- });
+// Function to display a question and its options
+function displayQuestion() {
+  const currentQuestion = quizQuestions[currentQuestionIndex];
+  const questionText = document.getElementById("question-text");
+  const answerButtons = document.getElementById("answer-buttons");
+
+  // Clear previous question and answer options
+  questionText.innerHTML = "";
+  answerButtons.innerHTML = "";
+
+  // Display the current question
+  questionText.innerHTML = currentQuestion.question;
+
+  // Create answer buttons for each option
+  currentQuestion.options.forEach(option => {
+    const button = document.createElement("button");
+    button.innerText = option;
+    button.classList.add("answer-button");
+    answerButtons.appendChild(button);
+
+    // Add click event listener to check the answer
+    button.addEventListener("click", function() {
+      checkAnswer(option);
+    });
+  });
 }
 
-// get selected
-function getSelected() {
- let answer;
- answerEl.forEach((answerEls) => {
-  if (answerEls.checked) {
-   answer = answerEls.id;
+// Function to check the selected answer
+function checkAnswer(selectedOption) {
+  const currentQuestion = quizQuestions[currentQuestionIndex];
+
+  // Check if the selected answer is correct
+  if (selectedOption === currentQuestion.correctAnswer) {
+    score++;
   }
- });
- return answer;
-}
 
-btnSubmit.addEventListener("click", function () {
- const answers = getSelected();
+  // Move to the next question or end the quiz if all questions are answered
+  currentQuestionIndex++;
 
- if (answers) {
-  if (answers === quizData[currentQuiz].correct) {
-   score++;
+  if (currentQuestionIndex < quizQuestions.length) {
+    displayQuestion();
+  } else {
+    endQuiz();
   }
-  nextQuestion();
- }
-});
-
-// next Slide
-function nextQuestion() {
- currentQuiz++;
-
- if (currentQuiz < quizData.length) {
-  loadQuiz();
- } else {
-  quiz.innerHTML = `<h2>You answered ${score}/${quizData.length} question correctly</h2>
-    <button type="button" onclick="location.reload()">Reload</button>
-    `;
-  footerEl.style.display = "none";
- }
 }
+
+// Function to start the timer
+function startTimer() {
+  timerInterval = setInterval(function() {
+    timeLeft--;
+
+    // Update the timer text
+    document.getElementById("timer").textContent = timeLeft;
+
+    // End the quiz if time runs out
+    if (timeLeft <= 0) {
+      endQuiz();
+    }
+  }, 1000);
+}
+
+// Function to end the quiz
+function endQuiz() {
+  // Stop the timer
+  clearInterval(timerInterval);
+
+  // Calculate the score percentage
+  const scorePercentage = (score / quizQuestions.length) * 100;
+
+  // Display the final score
+  const questionContainer = document.getElementById("question-container");
+  questionContainer.innerHTML = `
+    <h2>Quiz Completed!</h2>
+    <p>Your Score: ${score} out of ${quizQuestions.length}</p>
+    <p>Score Percentage: ${scorePercentage}%</p>
+  `;
+}
+
+// Add event listener to start the quiz when the start button is clicked
+document.getElementById("start-button").addEventListener("click", startQuiz)
