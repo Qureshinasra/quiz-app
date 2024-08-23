@@ -1,26 +1,66 @@
 // Define an array of quiz questions
 const quizQuestions = [
   {
-    question: "What is the capital of France?",
-    options: ["Paris", "London", "Berlin", "Rome"],
-    correctAnswer: "Paris"
+    question: "What does HTML stand for?",
+    options: ["home tool markup language", "hyperlink and text markup language", "hyper text markup language"],
+    correctAnswer: "hyper text markup language"
   },
   {
-    question: "Which planet is known as the Red Planet?",
-    options: ["Venus", "Mars", "Jupiter", "Saturn"],
-    correctAnswer: "Mars"
+    question: "Which character is used to indicate an end tag?",
+    options: ["^", "/", "<", "*"],
+    correctAnswer: "/"
   },
   {
-    question: "What is the chemical symbol for gold?",
-    options: ["Au", "Ag", "Cu", "Fe"],
-    correctAnswer: "Au"
+    question: "Which of these elements are all <table> elements?",
+    options: ["<table><tr><tt>", "<thead><body><tr>", "<table><head><tfoot>", "<table><tr><td>"],
+    correctAnswer: "<table><tr><td>"
+  },
+  {
+    question: "How can you make a numbered list?",
+    options: ["<ol>", "<dl>", "<list>", "<ul>"],
+    correctAnswer: "<ol>"
+  },
+  {
+    question: "What does CSS stand for?",
+    options: ["colorful style sheets", "computer style sheets", "creative style sheets", "cascading style sheets"],
+    correctAnswer: "cascading style sheets"
+  },
+  {
+    question: "Which HTML tag is used to define an internal style sheet?",
+    options: ["<script>", "<style>", "<css>"],
+    correctAnswer: "<style>"
+  },
+  {
+    question: "Which HTML attribute is used to define inline styles?",
+    options: ["styles", "class", "font", "style"],
+    correctAnswer: "style"
+  },
+  {
+    question: "How do you insert a comment in a CSS file?",
+    options: ["//this is a comment", "/*this is a comment*/", "'this is a comment", "//this is a comment//"],
+    correctAnswer: "/*this is a comment*/"
+  },
+  {
+    question: "Which property is used to change the font of an element?",
+    options: ["font-style", "font-family", "font-weight"],
+    correctAnswer: "font-family" 
+  },
+  {
+    question: "When using the padding property; are you allowed to use negative values?",
+    options: ["YES", "NO"],
+    correctAnswer: "NO"
+  },
+  {
+    question: "Inside which HTML element do we put the JavaScript?",
+    options: ["<js>", "<javascript>", "<scripting>", "<script>"],
+    correctAnswer: "<script>"
   }
 ];
 
 // Variables to track quiz state
 let currentQuestionIndex = 0;
 let score = 0;
-let timeLeft = 30;
+let timeLeft = 100;
 let timerInterval;
 
 // Function to start the quiz
